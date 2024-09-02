@@ -10,31 +10,27 @@ import * as utils from '../utils'
 import replace from 'replace'
 
 const customizeApplication = async () => {
-  if (config.get<string>('application.name')) {
-    customizeTitle()
+  const customizations = [
+    { key: 'application.name', action: customizeTitle },
+    { key: 'application.logo', action: customizeLogo },
+    { key: 'application.favicon', action: customizeFavicon },
+    { key: 'application.theme', action: customizeTheme },
+    { key: 'application.cookieConsent', action: customizeCookieConsentBanner },
+    { key: 'application.promotion', action: customizePromotion },
+    { key: 'hackingInstructor', action: customizeHackingInstructorAvatar },
+    { key: 'application.chatBot', action: customizeChatbotAvatar }
+  ]
+
+  for (const { key, action } of customizations) {
+    if (config.get(key)) {
+      await action()
+    }
   }
-  if (config.get('application.logo')) {
-    void customizeLogo()
-  }
-  if (config.get('application.favicon')) {
-    void customizeFavicon()
-  }
-  if (config.get('application.theme')) {
-    customizeTheme()
-  }
-  if (config.get('application.cookieConsent')) {
-    customizeCookieConsentBanner()
-  }
-  if (config.get('application.promotion')) {
-    void customizePromotionVideo()
-    void customizePromotionSubtitles()
-  }
-  if (config.get('hackingInstructor')) {
-    void customizeHackingInstructorAvatar()
-  }
-  if (config.get('application.chatBot')) {
-    void customizeChatbotAvatar()
-  }
+}
+
+const customizePromotion = async () => {
+  await customizePromotionVideo()
+  await customizePromotionSubtitles()
 }
 
 const customizeLogo = async () => {
